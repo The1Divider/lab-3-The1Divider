@@ -1,6 +1,6 @@
 import java.lang.Math;
 
-PFont Colonna;
+PFont Lucida;
 
 Cloud cloud;
 Cloud[] cloudArray;
@@ -12,8 +12,6 @@ int width = 450, height = 400;
 // randomize clouds?
 // resizable window
 // make more reliant on ratios
-// *** fix clouds ***
-
 
 void setup() {
   size(450, 400);
@@ -21,8 +19,8 @@ void setup() {
   stroke(0, 0, 0);
   ellipseMode(CENTER);
   
-  Colonna = createFont("lucida calligraphy italic.ttf", 48);
-  textFont(Colonna);
+  Lucida = createFont("lucida calligraphy italic.ttf", 48);
+  textFont(Lucida);
   textAlign(CENTER);
 
   cloudMarker = 300;
@@ -52,16 +50,24 @@ void draw() {
   Leaf leaf = new Leaf();
   
   fill(0);
-  text("Summer", 225, 370);
+  text("Asthetic", 225, 370);
+  
+  boolean moveCloud = false;
   
   for (Cloud cloud: cloudArray) {
     cloud.draw(cloud.cloudMarker);
-    if (cloud.cloudMarker > -100) {
-      cloud.cloudMarker -= 1;
+    if (cloud.moveCloud) {
+      if (cloud.cloudMarker > -100) {
+        cloud.cloudMarker -= 1;
+      } else {
+        cloud.cloudMarker = 450;
+      }
+      cloud.moveCloud = false;
     } else {
-      cloud.cloudMarker = 450;
+      cloud.moveCloud = true;
     }
   }
+  
   fill(219, 255, 64);
   ellipse(225, 100, 40, 40);
   
@@ -71,6 +77,7 @@ void draw() {
 
 class Cloud {
   PVector currentPoint;
+  boolean moveCloud = false;
   int cloudMarker;
   int y;
   
@@ -93,12 +100,12 @@ class Cloud {
    beginShape();
    fill(255, 255, 255);
    vertex(currentPoint.x, currentPoint.y);
-   bezierVertex(currentPoint.x - 5, currentPoint.y - 20, P1.x - 2, P1.y - 5, P1.x, P1.y /* P1 */);
+   bezierVertex(currentPoint.x - 10, currentPoint.y - 25, P1.x - 2, P1.y - 5, P1.x, P1.y /* P1 */);
    bezierVertex(P1.x + 10, P1.y - 10, P2.x - 10, P2.y - 15, P2.x, P2.y /* P2 */);
-   bezierVertex(P2.x + 15, P2.y - 5, P3.x + 10, P3.y - 10, P3.x, P3.y /* P3 */);
+   bezierVertex(P2.x + 15, P2.y - 5, P3.x + 15, P3.y - 7, P3.x, P3.y /* P3 */);
    bezierVertex(P3.x + 2, P3.y + 10, P4.x + 10, P4.y + 10, P4.x, P4.y /* P4 */);
    bezierVertex(P4.x - 2, P4.y + 15, P5.x - 5, P5.y + 15, P5.x, P5.y /* P5 */);
-   bezierVertex(P5.x - 15, P5.y + 10, currentPoint.x - 5, currentPoint.y + 15, currentPoint.x, currentPoint.y /* start point */);
+   bezierVertex(P5.x - 15, P5.y + 10, currentPoint.x - 10, currentPoint.y + 15, currentPoint.x, currentPoint.y /* start point */);
    endShape();
   }
 }
