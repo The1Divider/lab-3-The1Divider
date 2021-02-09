@@ -1,11 +1,19 @@
 import java.lang.Math;
 
+PFont Colonna;
+
 Cloud cloud;
-PFont MonoCorsiva;
-int width = 450, height = 400;
+Cloud[] cloudArray;
+
 int cloudMarker;
 int cloudMarker2;
-Cloud[] cloudArray;
+int width = 450, height = 400;
+
+// randomize clouds?
+// resizable window
+// make more reliant on ratios
+// *** fix clouds ***
+
 
 void setup() {
   size(450, 400);
@@ -13,14 +21,28 @@ void setup() {
   stroke(0, 0, 0);
   ellipseMode(CENTER);
   
-  MonoCorsiva = createFont("MonotypeCorsiva-48", 48);
-  textFont(MonoCorsiva);
-  
-  fill(5, 255, 107);
-  ellipse(225, 220, 20, 250);
+  Colonna = createFont("lucida calligraphy italic.ttf", 48);
+  textFont(Colonna);
+  textAlign(CENTER);
 
-  beginShape();
+  cloudMarker = 300;
+  cloudMarker2 = 25;
+  
+  cloudArray = new Cloud[2];
+  cloudArray[0] = new Cloud(cloudMarker, 100);
+  cloudArray[1] = new Cloud(cloudMarker2, 50);
+}
+
+
+void draw() {
+  colorMode(RGB);
+  background(103, 231, 255);
+  
   fill(165, 129, 0);
+  ellipse(225, 220, 20, 250);
+  
+  beginShape();
+  fill(183, 156, 67);
   vertex(0, 390);
   bezierVertex(45, 275, 405, 275, 450, 390);
   vertex(450, 400);
@@ -29,23 +51,11 @@ void setup() {
   
   Leaf leaf = new Leaf();
   
-  textAlign(CENTER);
+  fill(0);
   text("Summer", 225, 370);
   
-  cloudMarker = 300;
-  cloudMarker2 = 25;
-  
-  cloudArray = new Cloud[2];
-  cloudArray[0] = new Cloud(cloudMarker, 100);
-  cloudArray[1] = new Cloud(cloudMarker2, 50);
-   
-}
-
-void draw() {
-  background(103, 231, 255);
   for (Cloud cloud: cloudArray) {
     cloud.draw(cloud.cloudMarker);
-    
     if (cloud.cloudMarker > -100) {
       cloud.cloudMarker -= 1;
     } else {
@@ -58,21 +68,21 @@ void draw() {
   Petals petals = new Petals();
 }
 
+
 class Cloud {
   PVector currentPoint;
   int cloudMarker;
   int y;
   
   Cloud(int marker, int y) {
-   colorMode(RGB);
-   fill(255, 255, 255);
-   stroke(0, 0, 0);
-   
    cloudMarker = marker;
    this.y = y;
   }
   
   void draw(int x) {
+   colorMode(RGB); 
+   fill(255, 255, 255);
+   stroke(0, 0, 0);
    
    currentPoint = new PVector(x, this.y);
    PVector P1 = new PVector(currentPoint.x + 40, currentPoint.y - 20);
@@ -83,9 +93,9 @@ class Cloud {
    beginShape();
    fill(255, 255, 255);
    vertex(currentPoint.x, currentPoint.y);
-   bezierVertex(currentPoint.x - 10, currentPoint.y - 20, P1.x - 2, P1.y - 5, P1.x, P1.y /* P1 */);
+   bezierVertex(currentPoint.x - 5, currentPoint.y - 20, P1.x - 2, P1.y - 5, P1.x, P1.y /* P1 */);
    bezierVertex(P1.x + 10, P1.y - 10, P2.x - 10, P2.y - 15, P2.x, P2.y /* P2 */);
-   bezierVertex(P2.x + 15, P2.y + 10, P3.x + 10, P3.y - 10, P3.x, P3.y /* P3 */);
+   bezierVertex(P2.x + 15, P2.y - 5, P3.x + 10, P3.y - 10, P3.x, P3.y /* P3 */);
    bezierVertex(P3.x + 2, P3.y + 10, P4.x + 10, P4.y + 10, P4.x, P4.y /* P4 */);
    bezierVertex(P4.x - 2, P4.y + 15, P5.x - 5, P5.y + 15, P5.x, P5.y /* P5 */);
    bezierVertex(P5.x - 15, P5.y + 10, currentPoint.x - 5, currentPoint.y + 15, currentPoint.x, currentPoint.y /* start point */);
@@ -93,7 +103,6 @@ class Cloud {
   }
 }
   
-
 
 void rotate2D(PVector v, float theta) {
   float xTemp = v.x;
@@ -165,14 +174,12 @@ class Petals {
   }
 }
 
+
 class Leaf {
   Leaf() {
     colorMode(HSB, 359, 99, 99);
     int[] colours = {0, 0, 0};
     colours = colourLeaf(colours);
-    System.out.println(colours[0]);
-    System.out.println(colours[1]);
-    System.out.println(colours[2]);
     
     PVector leafDim = new PVector(70, 20);
     PVector anchor = new PVector(230, 200);
